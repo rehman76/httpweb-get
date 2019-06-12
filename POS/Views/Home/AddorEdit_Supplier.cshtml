@@ -1,0 +1,29 @@
+﻿@model  POS.Models.Supplier
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("AddorEdit_Supplier", "Home", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.SupplierId)
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+        @Html.EditorFor(model => model.Name, new { htmlattributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Number, new { @class = "control-label" })
+        @Html.EditorFor(model => model.Number, new { htmlattributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Number)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Phone, new { @class = "control-label" })
+        @Html.EditorFor(model => model.Phone, new { htmlattributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Phone)
+    </div>
+    <div class="form-group">
+        <input type="submit" value="submit" class="btn btn-primary" />
+        <input type="reset" value="reset" class="btn btn-warning" />
+    </div>
+
+}
+

@@ -1,0 +1,21 @@
+﻿@model  POS.Models.Product
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("AddorEdit_Product", "Home", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.HiddenFor(model => model.ProductId)
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+        @Html.EditorFor(model => model.Name, new { htmlattributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+   
+    <div class="form-group">
+        <input type="submit" value="submit" class="btn btn-primary" />
+        <input type="reset" value="reset" class="btn btn-warning" />
+    </div>
+
+}
+
+

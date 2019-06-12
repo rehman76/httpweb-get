@@ -1,0 +1,96 @@
+﻿
+<h2>Add Product</h2>
+<a href="#" class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddorEdit_Product","Home")')"><i class="fa fa-plus"></i>Add Product</a>
+<table id="employeeTable" class="display">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+@section scripts{
+
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        var Popup, dataTable;
+        $(document).ready(function () {
+            dataTable = $("#employeeTable").DataTable({
+                "ajax": {
+                    "url": "/Home/Detail_Product",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Name" },
+                    {"data": "ProductId", "render": function (data) {
+                            return "<a class ='btn btn-primary' btn-sm onclick= PopupForm('@Url.Action("AddorEdit_Product","Home")/" + data + "')><i class='fa fa-pencil'></i>Edit</a><a class ='btn btn-danger' btn-sm style='margin-left:5px' onclick = Delete("+data+")><i class='fa fa-trash'></i>Delete</a>";
+                    }}
+                ],
+                "language": {
+                    "emptyTable" : "No Data Found,Please click on <b>Add new Button</b>"
+                }
+
+
+            });
+        });
+        function PopupForm(url) {
+            var formDiv = $('<div/>')
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'Fill Product Details',
+                        height: 400,
+                        width: 700,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+
+
+                    });
+                });
+        }
+            function SubmitForm(form)
+            {
+                console.log(form);
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+
+                        }
+                    }
+
+                });
+                return false;
+            }
+        function Delete(id) {
+            if (confirm("Are you sure you want to delete this record")) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete_Product","Home")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+                            console.log("Data Deleted Successfully");
+                        }
+
+                    }
+                });
+            }
+        }
+    </script>
+
+}
+
